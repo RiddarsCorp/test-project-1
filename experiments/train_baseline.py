@@ -8,13 +8,13 @@ from sklearn.metrics import accuracy_score
 X = np.load("data/features.npy")
 y = np.load("data/labels.npy")
 
-# Масштабируем ВСЕ данные до разбиения на train и test
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
+# Сначала разбиваем, затем масштабируем: scaler учится только на train
 X_train, X_test, y_train, y_test = train_test_split(
-    X_scaled, y, test_size=0.2, random_state=42
+    X, y, test_size=0.2, random_state=42
 )
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
 
 model = LogisticRegression(max_iter=1000)
 model.fit(X_train, y_train)
